@@ -1,7 +1,8 @@
+import java.util.Set;
 import java.util.Stack;
 
 public interface Operation {
 
-    void apply(Stack<Integer> stack);
+    void apply(Stack<Set<Integer>> stack);
     
 }
