@@ -20,7 +20,11 @@ public class Calculator {
 
         while (true) {
             System.out.print("> ");
-            String input = scanner.next();
+            String input = scanner.nextLine();
+
+            if (input.isEmpty()) {
+                continue;
+            }
 
             if (input.equals("quit")) {
                 break;
