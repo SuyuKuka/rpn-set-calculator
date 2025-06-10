@@ -8,8 +8,8 @@ public class SubOperation implements Operation {
             throw new IllegalArgumentException("not enough operands for subtraction.");
         }
         
-        int a = stack.pop();
         int b = stack.pop();
+        int a = stack.pop();
         stack.push(a - b);
     }
 
