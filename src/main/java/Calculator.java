@@ -1,23 +1,23 @@
-import java.util.Scanner;
 
+import java.util.Scanner;
 import set_calculator.SetCalculator;
 import symbolic_calculator.SymbolicCalculator;
 
 public class Calculator {
 
     public static void printHelp() {
-        System.out.println(
-            "--------------------------------------------------------------------------------\n" + 
-            "Welcome to Calculator! Here are the commands you can use:\n" + 
-            "\n" +
-            "Utility Commands:\n" + 
-            "  `help`       Displays this help message.\n" +
-            "  `run 1/2`    Runs the calculator (1 for set calculator, 2 for symbolic calculator).\n" +
-            "  `quit`       Leave the application.\n" +
-            "\n" +
-            "Stack Display Information:\n" +
-            "  After each operation, the current state of the stack will be displayed.\n" +
-            "--------------------------------------------------------------------------------"
+        System.out.println("""
+                --------------------------------------------------------------------------------
+                Welcome to Calculator! Here are the commands you can use:
+                
+                Utility Commands:
+                    `help`       Displays this help message.
+                    `run 1/2`    Runs the calculator (1 for set calculator, 2 for symbolic calculator).
+                    `quit`       Leave the application.
+                
+                Stack Display Information:
+                    After each operation, the current state of the stack will be displayed.
+                --------------------------------------------------------------------------------"""
         );
     }
 
@@ -58,5 +58,5 @@ public class Calculator {
         scanner.close();
         System.out.println("Goodbye!");
     }
-    
+
 }

@@ -1,12 +1,11 @@
 package set_calculator;
 
+import common.operations.Operation;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
-import java.util.HashMap;
-import java.util.Scanner;
-
-import common.operations.Operation;
 import set_calculator.operation.*;
 
 public class SetCalculator {
@@ -40,7 +39,7 @@ public class SetCalculator {
             }
 
             if (input.equals("stack")) {
-                printStack(stack);            
+                printStack(stack);
                 continue;
             }
 
@@ -73,34 +72,34 @@ public class SetCalculator {
                 System.err.println("Error: " + e.getMessage());
             }
 
-            printStack(stack);            
+            printStack(stack);
         }
     }
 
     public void printHelp() {
-        System.out.println(
-            "--------------------------------------------------------------------------------\n" + 
-            "Welcome to SetCalculator! Here are the commands you can use:\n" + 
-            "\n" + 
-            "Set:\n" + 
-            "  Just type a number (`5`, `100`, `-3`) to push it onto the stack.\n" + 
-            "\n" + 
-            "Operations:\n" + 
-            "  `U`          Pushes the union of the top two sets onto the stack.\n" + 
-            "  `I`          Pushes the intersection of the top two sets onto the stack.\n" + 
-            "  `M`          Makes the sum of the top two sets onto the stack.\n" +
-            "  `min`        Pushes the min of the top set onto the stack.\n" +
-            "  `max`        Pushes the max of the top set onto the stack.\n" + 
-            "\n" + 
-            "Utility Commands:\n" + 
-            "  `help`       Displays this help message.\n" +
-            "  `stack`      Displays the current state of the stack.\n" +
-            "  `clear`      Clears the stack.\n" +
-            "  `quit`       Returns to the main application.\n" +
-            "\n" +
-            "Stack Display Information:\n" +
-            "  After each operation, the current state of the stack will be displayed.\n" +
-            "--------------------------------------------------------------------------------"
+        System.out.println("""
+            --------------------------------------------------------------------------------
+            Welcome to SetCalculator! Here are the commands you can use:
+            
+            Set:
+                Just type a number (`5`, `100`, `-3`) to push it onto the stack.
+            
+            Operations:
+                `U`          Pushes the union of the top two sets onto the stack.
+                `I`          Pushes the intersection of the top two sets onto the stack.
+                `M`          Makes the sum of the top two sets onto the stack.
+                `min`        Pushes the min of the top set onto the stack.
+                `max`        Pushes the max of the top set onto the stack.
+            
+            Utility Commands:
+                `help`       Displays this help message.
+                `stack`      Displays the current state of the stack.
+                `clear`      Clears the stack.
+                `quit`       Returns to the main application.
+            
+            Stack Display Information:
+                After each operation, the current state of the stack will be displayed.
+            --------------------------------------------------------------------------------"""
         );
     }
 
