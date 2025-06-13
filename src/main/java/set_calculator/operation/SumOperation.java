@@ -1,7 +1,10 @@
-import java.util.HashSet;
+package set_calculator.operation;
+
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+
+import common.operations.Operation;
 
 public class SumOperation implements Operation {
 

@@ -1,15 +1,20 @@
-import java.util.HashMap;
+package set_calculator;
+
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
+import java.util.HashMap;
+import java.util.Scanner;
 
-public class Calculator {
+import common.operations.Operation;
+import set_calculator.operation.*;
+
+public class SetCalculator {
 
     private final Stack<Set<Integer>> stack = new Stack<>();
     private final Map<String, Operation> operationsMap;
 
-    public Calculator() {
+    public SetCalculator() {
         operationsMap = new HashMap<>();
         operationsMap.put("U", new UnionOperation());
         operationsMap.put("I", new IntersectionOperation());
@@ -18,8 +23,8 @@ public class Calculator {
         operationsMap.put("max", new MaxOperation());
     }
 
-    public void run() {
-        Scanner scanner = new Scanner(System.in);
+    public void run(Scanner scanner) {
+        System.out.println("You are in SetCalculator! Type `help` for more information.");
 
         while (true) {
             System.out.print("> ");
@@ -46,6 +51,7 @@ public class Calculator {
             }
 
             if (input.equals("quit")) {
+                System.out.println("Returning to main application.");
                 break;
             }
 
@@ -69,18 +75,12 @@ public class Calculator {
 
             printStack(stack);            
         }
-
-        scanner.close();
-        System.out.println("Goodbye!");
     }
 
     public void printHelp() {
         System.out.println(
             "--------------------------------------------------------------------------------\n" + 
-            "Calculator v1.0\n" + 
-            "--------------------------------------------------------------------------------\n" + 
-            "\n" + 
-            "Welcome to Calculator! Here are the commands you can use:\n" + 
+            "Welcome to SetCalculator! Here are the commands you can use:\n" + 
             "\n" + 
             "Set:\n" + 
             "  Just type a number (`5`, `100`, `-3`) to push it onto the stack.\n" + 
@@ -96,7 +96,7 @@ public class Calculator {
             "  `help`       Displays this help message.\n" +
             "  `stack`      Displays the current state of the stack.\n" +
             "  `clear`      Clears the stack.\n" +
-            "  `quit`       Exits the MyShell application.\n" +
+            "  `quit`       Returns to the main application.\n" +
             "\n" +
             "Stack Display Information:\n" +
             "  After each operation, the current state of the stack will be displayed.\n" +
@@ -117,11 +117,6 @@ public class Calculator {
         } else {
             System.out.println("Stack empty");
         }
-    }
-
-    public static void main(String[] args) {
-        Calculator calculator = new Calculator();
-        calculator.run();
     }
 
 }

@@ -1,7 +1,11 @@
-import java.util.Collections;
-import java.util.HashSet;
+package set_calculator.operation;
+
 import java.util.Set;
 import java.util.Stack;
+import java.util.HashSet;
+import java.util.Collections;
+
+import common.operations.Operation;
 
 public class MaxOperation implements Operation {
 
