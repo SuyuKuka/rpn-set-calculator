@@ -1,15 +1,15 @@
-package set_calculator.operation;
+package set_calculator.operations;
 
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import common.operations.Operation;
+import common.operation.Operation;
 
-public class SumOperation implements Operation {
+public class SumOperation implements Operation<Set<Integer>> {
 
     @Override
-    public void apply(Stack<Set<Integer>> stack) {
+    public void apply(final Stack<Set<Integer>> stack) {
         if (stack.size() < 2) {
             throw new IllegalArgumentException("not enough operands for sum.");
         }
@@ -22,6 +22,7 @@ public class SumOperation implements Operation {
                 sum.add(a + b);
             }
         }
+        
         stack.push(sum);
     }
 

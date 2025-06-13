@@ -1,16 +1,16 @@
-package set_calculator.operation;
+package set_calculator.operations;
 
 import java.util.Set;
 import java.util.Stack;
 import java.util.HashSet;
 import java.util.Collections;
 
-import common.operations.Operation;
+import common.operation.Operation;
 
-public class MinOperation implements Operation {
+public class MinOperation implements Operation<Set<Integer>> {
 
     @Override
-    public void apply(Stack<Set<Integer>> stack) {
+    public void apply(final Stack<Set<Integer>> stack) {
         if (stack.isEmpty()) {
             throw new IllegalArgumentException("not enough operands for min.");
         }

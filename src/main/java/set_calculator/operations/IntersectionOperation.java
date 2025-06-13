@@ -1,15 +1,15 @@
-package set_calculator.operation;
+package set_calculator.operations;
 
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import common.operations.Operation;
+import common.operation.Operation;
 
-public class IntersectionOperation implements Operation {
+public class IntersectionOperation implements Operation<Set<Integer>> {
 
     @Override
-    public void apply(Stack<Set<Integer>> stack) {
+    public void apply(final Stack<Set<Integer>> stack) {
         if (stack.size() < 2) {
             throw new IllegalArgumentException("not enough operands for intersection.");
         }

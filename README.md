@@ -8,6 +8,31 @@
 
 Tapez help pour plus d'information
 
+## Structure du code
+
+```
+📁 projet-cpoo/
+├── 📄 README.md
+│
+├── 📄 Sujet doral de session 2.pdf
+│
+└── 📁 src/
+    └── 📁 main/
+        └── 📁 java/
+            ├── 📁 common/
+            │   ├── 📁 formula/
+            │   │
+            │   └── 📁 operation/
+            │
+            ├── 📁 set_calculator/
+            │   └── 📁 operations/
+            │
+            └── 📁 symbolic_calculator/
+                ├── 📁 formulas/
+                │
+                └── 📁 operations/
+```
+
 ## Membres
 |  Nom  | Prénom | N° étudiant |
 | :---: | :----: | :---------: |

@@ -1,17 +1,18 @@
 package set_calculator;
 
-import common.operations.Operation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
-import set_calculator.operation.*;
+
+import common.operation.Operation;
+import set_calculator.operations.*;
 
 public class SetCalculator {
 
     private final Stack<Set<Integer>> stack = new Stack<>();
-    private final Map<String, Operation> operationsMap;
+    private final Map<String, Operation<Set<Integer>>> operationsMap;
 
     public SetCalculator() {
         operationsMap = new HashMap<>();
@@ -22,48 +23,45 @@ public class SetCalculator {
         operationsMap.put("max", new MaxOperation());
     }
 
-    public void run(Scanner scanner) {
+    public void run(final Scanner scanner) {
         System.out.println("You are in SetCalculator! Type `help` for more information.");
 
         while (true) {
             System.out.print("> ");
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
 
             if (input.isEmpty()) {
                 continue;
-            }
-
-            if (input.equals("help")) {
+            } else if (input.equals("help")) {
                 printHelp();
                 continue;
-            }
-
-            if (input.equals("stack")) {
+            } else if (input.equals("stack")) {
                 printStack(stack);
                 continue;
-            }
-
-            if (input.equals("clear")) {
+            } else if (input.equals("clear")) {
                 stack.clear();
                 System.out.println("Stack cleared.");
                 continue;
-            }
-
-            if (input.equals("quit")) {
+            } else if (input.equals("quit")) {
                 System.out.println("Returning to main application.");
                 break;
+            } else if (input.equals("exit")) {
+                scanner.close();
+                System.out.println("Goodbye!");
+                System.exit(0);
             }
+
 
             try {
                 int value = Integer.parseInt(input);
-                Operation constanteOp = new ConstantOperation(value);
-                constanteOp.apply(stack);
+                Operation<Set<Integer>> constantOp = new ConstantOperation(value);
+                constantOp.apply(stack);
             } catch (NumberFormatException e) {
-                Operation operation = operationsMap.get(input);
+                Operation<Set<Integer>> operation = operationsMap.get(input);
                 if (operation != null) {
                     operation.apply(stack);
                 } else {
-                    System.err.println("Error: invalid operation or not found or not defined (" + input + ")");
+                    System.err.println("Error: invalid operation/operation not found or not defined (" + input + ")");
                     continue;
                 }
             } catch (IllegalArgumentException e) {
@@ -76,7 +74,7 @@ public class SetCalculator {
         }
     }
 
-    public void printHelp() {
+    private void printHelp() {
         System.out.println("""
             --------------------------------------------------------------------------------
             Welcome to SetCalculator! Here are the commands you can use:
@@ -96,6 +94,7 @@ public class SetCalculator {
                 `stack`      Displays the current state of the stack.
                 `clear`      Clears the stack.
                 `quit`       Returns to the main application.
+                `exit`       Leave the application.
             
             Stack Display Information:
                 After each operation, the current state of the stack will be displayed.
@@ -103,7 +102,7 @@ public class SetCalculator {
         );
     }
 
-    public void printStack(Stack<Set<Integer>> stack) {
+    private void printStack(final Stack<Set<Integer>> stack) {
         if (!stack.isEmpty()) {
             for (int i = 0; i < stack.size(); i++) {
                 if (i == stack.size() - 1) {
