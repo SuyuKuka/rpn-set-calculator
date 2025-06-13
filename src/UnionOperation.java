@@ -1,6 +1,7 @@
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 public class UnionOperation implements Operation {
     
@@ -12,7 +13,7 @@ public class UnionOperation implements Operation {
 
         Set<Integer> set1 = stack.pop();
         Set<Integer> set2 = stack.pop();
-        Set<Integer> union = new HashSet<>(set1);
+        Set<Integer> union = new TreeSet<>(set1);
         union.addAll(set2);
         stack.push(union);
     }

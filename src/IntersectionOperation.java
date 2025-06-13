@@ -1,6 +1,7 @@
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 public class IntersectionOperation implements Operation {
 
@@ -12,7 +13,7 @@ public class IntersectionOperation implements Operation {
 
         Set<Integer> set1 = stack.pop();
         Set<Integer> set2 = stack.pop();
-        Set<Integer> intersection = new HashSet<>(set1);
+        Set<Integer> intersection = new TreeSet<>(set1);
         intersection.retainAll(set2);
         stack.push(intersection);
     }

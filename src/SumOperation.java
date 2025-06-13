@@ -1,6 +1,7 @@
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
 
 public class SumOperation implements Operation {
 
@@ -12,7 +13,7 @@ public class SumOperation implements Operation {
 
         Set<Integer> set1 = stack.pop();
         Set<Integer> set2 = stack.pop();
-        Set<Integer> sum = new HashSet<>();
+        Set<Integer> sum = new TreeSet<>();
         for (Integer a : set1) {
             for (Integer b : set2) {
                 sum.add(a + b);
