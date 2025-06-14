@@ -2,11 +2,10 @@ package symbolic_calculator.operations;
 
 import java.util.Stack;
 
-import common.formula.Formula;
-import common.operation.Operation;
+import symbolic_calculator.formulas.Formula;
 import symbolic_calculator.formulas.IntersectionFormula;
 
-public class IntersectionFormulaOperation implements Operation<Formula> {
+public class IntersectionFormulaOperation implements FormulaOperation {
 
     @Override
     public void apply(final Stack<Formula> stack) {

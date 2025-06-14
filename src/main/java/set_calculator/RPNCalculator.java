@@ -1,31 +1,32 @@
 package set_calculator;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
 import java.util.Stack;
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Collection;
 
-import common.operation.Operation;
 import set_calculator.operations.*;
 
-public class SetCalculator {
+public class RPNCalculator<T extends Collection<Integer>> {
 
-    private final Stack<Set<Integer>> stack = new Stack<>();
-    private final Map<String, Operation<Set<Integer>>> operationsMap;
+    private final Stack<T> stack;
+    private final Map<String, Operation<T>> operationsMap;
+    private final Class<? extends T> typeClass;
 
-    public SetCalculator() {
+    public RPNCalculator(Class<? extends T> typeClass) {
+        stack = new Stack<>();
         operationsMap = new HashMap<>();
-        operationsMap.put("U", new UnionOperation());
-        operationsMap.put("I", new IntersectionOperation());
-        operationsMap.put("M", new SumOperation());
-        operationsMap.put("min", new MinOperation());
-        operationsMap.put("max", new MaxOperation());
+        this.typeClass = typeClass;
+
+        operationsMap.put("U", new UnionOperation<>(typeClass));
+        operationsMap.put("I", new IntersectionOperation<>(typeClass));
+        operationsMap.put("M", new SumOperation<>(typeClass));
+        operationsMap.put("min", new MinOperation<>(typeClass));
+        operationsMap.put("max", new MaxOperation<>(typeClass));
     }
 
     public void run(final Scanner scanner) {
-        System.out.println("You are in SetCalculator! Type `help` for more information.");
-
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine().trim();
@@ -54,10 +55,10 @@ public class SetCalculator {
 
             try {
                 int value = Integer.parseInt(input);
-                Operation<Set<Integer>> constantOp = new ConstantOperation(value);
+                Operation<T> constantOp = new ConstantOperation<>(value, typeClass);
                 constantOp.apply(stack);
             } catch (NumberFormatException e) {
-                Operation<Set<Integer>> operation = operationsMap.get(input);
+                Operation<T> operation = operationsMap.get(input);
                 if (operation != null) {
                     operation.apply(stack);
                 } else {
@@ -77,9 +78,9 @@ public class SetCalculator {
     private void printHelp() {
         System.out.println("""
             --------------------------------------------------------------------------------
-            Welcome to SetCalculator! Here are the commands you can use:
+            Welcome to RPNCalculator! Here are the commands you can use:
             
-            Set:
+            Elements:
                 Just type a number (`5`, `100`, `-3`) to push it onto the stack.
             
             Operations:
@@ -102,7 +103,7 @@ public class SetCalculator {
         );
     }
 
-    private void printStack(final Stack<Set<Integer>> stack) {
+    private void printStack(final Stack<T> stack) {
         if (!stack.isEmpty()) {
             for (int i = 0; i < stack.size(); i++) {
                 if (i == stack.size() - 1) {

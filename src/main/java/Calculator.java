@@ -1,5 +1,10 @@
+import java.util.Set;
+import java.util.List;
 import java.util.Scanner;
-import set_calculator.SetCalculator;
+import java.util.TreeSet;
+import java.util.ArrayList;
+
+import set_calculator.RPNCalculator;
 import symbolic_calculator.SymbolicCalculator;
 
 public class Calculator {
@@ -11,7 +16,8 @@ public class Calculator {
             
             Utility Commands:
                 `help`       Displays this help message.
-                `run 1/2`    Runs the calculator (1 for set calculator, 2 for symbolic calculator).
+                `run 1 opt`  Runs the calculator (opt = set / list).
+                `run 2`      Runs the symbolic calculator.
                 `exit`       Leave the application.
             
             Stack Display Information:
@@ -33,11 +39,22 @@ public class Calculator {
                 } else if (input.equals("help")) {
                     printHelp();
                     continue;
-                } else if (input.equals("run 1")) {
-                    SetCalculator setCalculator = new SetCalculator();
+                } else if (input.equals("run 1 set")) {
+                    System.out.println("You are in RPNCalculator set version! Type `help` for more information.");
+                    // Pour éviter le warning alors que le type est compatible
+                    @SuppressWarnings("unchecked")
+                    RPNCalculator<Set<Integer>> setCalculator = new RPNCalculator<>(TreeSet.class);
                     setCalculator.run(scanner);
                     continue;
+                } else if (input.equals("run 1 list")) {
+                    System.out.println("You are in RPNCalculator list version! Type `help` for more information.");
+                    // Pour éviter le warning alors que le type est compatible
+                    @SuppressWarnings("unchecked")
+                    RPNCalculator<List<Integer>> listCalculator = new RPNCalculator<>(ArrayList.class);
+                    listCalculator.run(scanner);
+                    continue;
                 } else if (input.equals("run 2")) {
+                    System.out.println("You are in SymbolicCalculator! Type `help` for more information.");
                     SymbolicCalculator symbolicCalculator = new SymbolicCalculator();
                     symbolicCalculator.run(scanner);
                     continue;

@@ -2,9 +2,18 @@
 
 ## Manuel d'utilisation
 
-1) Compilez puis lancer le programme  
-2) `run 1`, pour lancer la partie 4 (Calcul sur les ensembles)
-3) `run 2`, pour lancer la partie 5 (Calculatrice symbolique)  
+1) Compiler le programme:  
+`javac -d bin src/main/java/**/**/*.java src/main/java/**/*.java src/main/java/*.java`
+
+2) Lancer le programme:  
+`java -cp bin Calculator`
+
+3) Lancer la partie 4 & 6 (Calcul sur les ensembles & Au delà des ensembles):  
+`run 1 set`  
+`run 1 list`
+
+4) Lancer la partie 5 (Calculatrice symbolique):  
+`run 2`
 
 Tapez help pour plus d'information
 
@@ -19,11 +28,6 @@ Tapez help pour plus d'information
 └── 📁 src/
     └── 📁 main/
         └── 📁 java/
-            ├── 📁 common/
-            │   ├── 📁 formula/
-            │   │
-            │   └── 📁 operation/
-            │
             ├── 📁 set_calculator/
             │   └── 📁 operations/
             │

@@ -1,29 +1,46 @@
 package set_calculator.operations;
 
-import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-import common.operation.Operation;
+public class SumOperation<T extends Collection<Integer>> implements Operation<T> {
 
-public class SumOperation implements Operation<Set<Integer>> {
+    private final Class<? extends T> typeClass;
+
+    public SumOperation(Class<? extends T> typeClass) {
+        this.typeClass = typeClass;
+    }
 
     @Override
-    public void apply(final Stack<Set<Integer>> stack) {
+    public void apply(final Stack<T> stack) {
         if (stack.size() < 2) {
             throw new IllegalArgumentException("not enough operands for sum.");
         }
 
-        Set<Integer> set1 = stack.pop();
-        Set<Integer> set2 = stack.pop();
-        Set<Integer> sum = new TreeSet<>();
+        List<Integer> tmp = new ArrayList<>();
+        T set1 = stack.pop();
+        T set2 = stack.pop();
+        
+        // tmp.addAll(set1);
+        // tmp.addAll(set2);
         for (Integer a : set1) {
             for (Integer b : set2) {
-                sum.add(a + b);
+                tmp.add(a + b);
             }
         }
-        
-        stack.push(sum);
+
+        Collections.sort(tmp);
+        System.out.println("TMP: " + tmp);
+        try {
+            T sum = typeClass.getDeclaredConstructor().newInstance();
+            sum.addAll(tmp);
+            stack.push(sum);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

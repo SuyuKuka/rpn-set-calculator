@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Collections;
 
-import common.formula.Formula;
-
 public record ConstantFormula(int value) implements Formula {
 
     @Override

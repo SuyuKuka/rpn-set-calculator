@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Collections;
 
-import common.formula.Formula;
-
 public record MaxFormula(Formula value) implements Formula {
 
     @Override

@@ -1,4 +1,4 @@
-package common.formula;
+package symbolic_calculator.formulas;
 
 import java.util.Set;
 import java.util.List;
@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Collections;
 
-public interface Formula {
+public sealed interface Formula permits ConstantFormula, UnionFormula, IntersectionFormula, 
+                                    SumFormula, MinFormula, MaxFormula, DCFormula, UCFormula {
+    String toString();
 
     Optional<Set<Integer>> eval();
 

@@ -9,15 +9,13 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Optional;
 
-import common.formula.Formula;
-import common.operation.Operation;
 import symbolic_calculator.formulas.*;
 import symbolic_calculator.operations.*;
 
 public class SymbolicCalculator {
 
     private final Stack<Formula> stack = new Stack<>();
-    private final Map<String, Operation<Formula>> operationsMap;
+    private final Map<String, FormulaOperation> operationsMap;
     private final Map<Formula, Optional<Set<Integer>>> evalCache = new HashMap<>();
 
     public SymbolicCalculator() {
@@ -32,8 +30,6 @@ public class SymbolicCalculator {
     }
 
     public void run(final Scanner scanner) {
-        System.out.println("You are in SymbolicCalculator! Type `help` for more information.");
-
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine().trim();
@@ -65,7 +61,7 @@ public class SymbolicCalculator {
                 int value = Integer.parseInt(input);
                 stack.push(new ConstantFormula(value));
             } catch (NumberFormatException e) {
-                Operation<Formula> operation = operationsMap.get(input);
+                FormulaOperation operation = operationsMap.get(input);
                 if (operation != null) {
                     operation.apply(stack);
                 } else {

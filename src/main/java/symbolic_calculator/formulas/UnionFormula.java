@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Optional;
 
-import common.formula.Formula;
-
 public record UnionFormula(Formula left, Formula right) implements Formula {
 
     @Override

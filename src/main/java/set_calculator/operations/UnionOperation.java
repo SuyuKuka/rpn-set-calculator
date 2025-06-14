@@ -1,24 +1,32 @@
 package set_calculator.operations;
 
-import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
+import java.util.Collection;
 
-import common.operation.Operation;
-
-public class UnionOperation implements Operation<Set<Integer>> {
+public class UnionOperation<T extends Collection<Integer>> implements Operation<T> {
     
+    private final Class<? extends T> typeClass;
+
+    public UnionOperation(final Class<? extends T> typeClass) {
+        this.typeClass = typeClass;
+    }
+
     @Override
-    public void apply(final Stack<Set<Integer>> stack) {
+    public void apply(final Stack<T> stack) {
         if (stack.size() < 2) {
             throw new IllegalArgumentException("not enough operands for union.");
         }
 
-        Set<Integer> set1 = stack.pop();
-        Set<Integer> set2 = stack.pop();
-        Set<Integer> union = new TreeSet<>(set1);
-        union.addAll(set2);
-        stack.push(union);
+        T set1 = stack.pop();
+        T set2 = stack.pop();
+        try {
+            T union = typeClass.getDeclaredConstructor().newInstance();
+            union.addAll(set1);
+            union.addAll(set2);
+            stack.push(union);
+        } catch (Exception e) {
+            throw new RuntimeException("Error during union", e);
+        }
     }
     
 }

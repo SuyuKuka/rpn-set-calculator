@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Collections;
 
-import common.formula.Formula;
-
 public record DCFormula(Formula value) implements Formula {
 
     @Override

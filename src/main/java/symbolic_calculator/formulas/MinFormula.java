@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Collections;
 
-import common.formula.Formula;
-
 public record MinFormula(Formula value) implements Formula {
 
     @Override
