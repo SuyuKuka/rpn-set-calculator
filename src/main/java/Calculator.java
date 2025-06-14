@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import set_calculator.RPNCalculator;
 import symbolic_calculator.SymbolicCalculator;
@@ -26,6 +27,12 @@ public class Calculator {
         );
     }
 
+    // Méthode pour créer un calculateur RPN (et pour éviter le warning unchecked)
+    private static <T extends Collection<Integer>> RPNCalculator<T> createRPNCalculator(Class<T> typeClass) {
+        return new RPNCalculator<>(typeClass);
+    }
+
+    @SuppressWarnings("unchecked")
     public static void main(final String[] args) {
         System.out.println("Welcome to Calculator! Type `help` for more information.");
         
@@ -41,17 +48,21 @@ public class Calculator {
                     continue;
                 } else if (input.equals("run 1 set")) {
                     System.out.println("You are in RPNCalculator set version! Type `help` for more information.");
-                    // Pour éviter le warning alors que le type est compatible
-                    @SuppressWarnings("unchecked")
-                    RPNCalculator<Set<Integer>> setCalculator = new RPNCalculator<>(TreeSet.class);
-                    setCalculator.run(scanner);
+                    try {
+                        RPNCalculator<Set<Integer>> setCalculator = createRPNCalculator(TreeSet.class);
+                        setCalculator.run(scanner);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     continue;
                 } else if (input.equals("run 1 list")) {
                     System.out.println("You are in RPNCalculator list version! Type `help` for more information.");
-                    // Pour éviter le warning alors que le type est compatible
-                    @SuppressWarnings("unchecked")
-                    RPNCalculator<List<Integer>> listCalculator = new RPNCalculator<>(ArrayList.class);
-                    listCalculator.run(scanner);
+                    try {
+                        RPNCalculator<List<Integer>> listCalculator = createRPNCalculator(ArrayList.class);
+                        listCalculator.run(scanner);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     continue;
                 } else if (input.equals("run 2")) {
                     System.out.println("You are in SymbolicCalculator! Type `help` for more information.");

@@ -47,7 +47,6 @@ public class RPNCalculator<T extends Collection<Integer>> {
                 System.out.println("Returning to main application.");
                 break;
             } else if (input.equals("exit")) {
-                scanner.close();
                 System.out.println("Goodbye!");
                 System.exit(0);
             }

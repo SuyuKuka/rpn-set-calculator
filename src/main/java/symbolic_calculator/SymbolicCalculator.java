@@ -2,13 +2,13 @@ package symbolic_calculator;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Optional;
 
+import symbolic_calculator.memento.*;
 import symbolic_calculator.formulas.*;
 import symbolic_calculator.operations.*;
 
@@ -16,7 +16,7 @@ public class SymbolicCalculator {
 
     private final Stack<Formula> stack = new Stack<>();
     private final Map<String, FormulaOperation> operationsMap;
-    private final Map<Formula, Optional<Set<Integer>>> evalCache = new HashMap<>();
+    private final Stack<HistoryOperation> operationHistory = new Stack<>();
 
     public SymbolicCalculator() {
         operationsMap = new HashMap<>();
@@ -42,20 +42,22 @@ public class SymbolicCalculator {
                 continue;
             } else if (input.equals("clear")) {
                 stack.clear();
-                evalCache.clear();
+                operationHistory.clear();
+                updateHistory(); 
                 System.out.println("Stack cleared.");
                 continue;
             } else if (input.equals("undo")) {
-                undoLastOperation();
+                undo();
                 continue;
             } else if (input.equals("quit")) {
                 System.out.println("Returning to main application.");
                 break;
             } else if (input.equals("exit")) {
-                scanner.close();
                 System.out.println("Goodbye!");
                 System.exit(0);
             }
+
+            updateHistory();
 
             try {
                 int value = Integer.parseInt(input);
@@ -65,11 +67,22 @@ public class SymbolicCalculator {
                 if (operation != null) {
                     operation.apply(stack);
                 } else {
+                    if (!operationHistory.isEmpty()) {
+                        operationHistory.pop();
+                    }
+
                     System.err.println("Error: invalid operation/command not found or not defined (" + input + ")");
                 }
             } catch (IllegalArgumentException e) {
+                if (!operationHistory.isEmpty()) {
+                    operationHistory.pop();
+                }
+
                 System.err.println("Error operation: " + e.getMessage());
             } catch (Exception e) {
+                if (!operationHistory.isEmpty()) {
+                    operationHistory.pop(); 
+                }
                 System.err.println("Error: " + e.getMessage());
             }
 
@@ -121,7 +134,7 @@ public class SymbolicCalculator {
         System.out.println("Stack (Formula => Value) :");
         for (int i = 0; i < stack.size(); i++) {
             Formula formula = stack.get(i);
-            Optional<Set<Integer>> result = getEvaluatedFormula(formula);
+            Optional<Set<Integer>> result = formula.eval();
             String evalString = result.map(set -> formatSetForDisplay(set))
                                         .orElse("INFINITE / UNDEFINED");
             System.out.println(formula.toString() + " => " + evalString);
@@ -129,41 +142,25 @@ public class SymbolicCalculator {
     }
 
     private String formatSetForDisplay(Set<Integer> set) {
-        if (set == null) return "null";
         if (set.isEmpty()) return "{}";
         return "{" + new TreeSet<>(set).stream()
                                         .map(Object::toString)
                                         .collect(java.util.stream.Collectors.joining(", ")) + "}";
     }
 
-    private Optional<Set<Integer>> getEvaluatedFormula(final Formula formula) {
-        if (evalCache.containsKey(formula)) {
-            return evalCache.get(formula);
-        }
-
-        Optional<Set<Integer>> result = formula.eval();
-        evalCache.put(formula, result);
-        return result;
+    private void updateHistory() {
+        operationHistory.push(new HistoryOperation(stack));
     }
 
-    private void undoLastOperation() {
-        if (stack.isEmpty()) {
-            System.out.println("Empty stack.");
-            return;
-        }
-
-        Formula lastOperationFormula = stack.pop();
-        List<Formula> subFormulas = lastOperationFormula.getSubFormulas();
-        if (subFormulas.isEmpty()) {
-            System.out.println("Constant or atomic operation '" + lastOperationFormula.toString() + "' have been undone.");
-        } else {
-            for (Formula formula : subFormulas) {
-                stack.push(formula);
-            }
-            System.out.println("Operation '" + lastOperationFormula.toString() + "' have been undone.");
-        }
-
-        evalCache.clear();
+    private void undo() {
+        if (!operationHistory.isEmpty()) {
+            HistoryOperation history = operationHistory.pop();
+            stack.clear();
+            stack.addAll(history.restore());
+            System.out.println("Last operation undone.");
+        } 
+        
+        printStack();
     }
 
 }
