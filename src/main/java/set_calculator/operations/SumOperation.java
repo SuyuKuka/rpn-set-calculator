@@ -1,5 +1,6 @@
 package set_calculator.operations;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,11 @@ public class SumOperation<T extends Collection<Integer>> implements Operation<T>
         this.typeClass = typeClass;
     }
 
+    /**
+     * Pop deux ensembles de la pile et push la somme de Minkowski dans la pile
+     * 
+     * @param stack La pile
+     */
     @Override
     public void apply(final Stack<T> stack) {
         if (stack.size() < 2) {
@@ -24,8 +30,6 @@ public class SumOperation<T extends Collection<Integer>> implements Operation<T>
         T set1 = stack.pop();
         T set2 = stack.pop();
         
-        // tmp.addAll(set1);
-        // tmp.addAll(set2);
         for (Integer a : set1) {
             for (Integer b : set2) {
                 tmp.add(a + b);
@@ -33,12 +37,11 @@ public class SumOperation<T extends Collection<Integer>> implements Operation<T>
         }
 
         Collections.sort(tmp);
-        System.out.println("TMP: " + tmp);
         try {
             T sum = typeClass.getDeclaredConstructor().newInstance();
             sum.addAll(tmp);
             stack.push(sum);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

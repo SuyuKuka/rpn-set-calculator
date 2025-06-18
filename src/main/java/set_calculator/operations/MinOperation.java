@@ -1,8 +1,9 @@
 package set_calculator.operations;
 
-import java.util.Stack;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Stack;
 
 public class MinOperation<T extends Collection<Integer>> implements Operation<T> {
 
@@ -11,6 +12,12 @@ public class MinOperation<T extends Collection<Integer>> implements Operation<T>
     public MinOperation(Class<? extends T> typeClass) {
         this.typeClass = typeClass;
     }
+
+    /**
+     * Pop un ensemble de la pile et push la valeur min de l'ensemble dans la pile
+     * 
+     * @param stack La pile
+     */
     @Override
     public void apply(final Stack<T> stack) {
         if (stack.isEmpty()) {
@@ -27,7 +34,7 @@ public class MinOperation<T extends Collection<Integer>> implements Operation<T>
             T min = typeClass.getDeclaredConstructor().newInstance();
             min.add(minVal);
             stack.push(min);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

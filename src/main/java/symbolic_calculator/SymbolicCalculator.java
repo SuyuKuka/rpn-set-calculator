@@ -1,15 +1,14 @@
 package symbolic_calculator;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Optional;
-
-import symbolic_calculator.memento.*;
 import symbolic_calculator.formulas.*;
+import symbolic_calculator.memento.*;
 import symbolic_calculator.operations.*;
 
 public class SymbolicCalculator {
@@ -29,40 +28,50 @@ public class SymbolicCalculator {
         operationsMap.put("DC", new DCFormulaOperation());
     }
 
+
+    /**
+     * Lance la calculatrice symbolique
+     * 
+     * @param scanner Le scanner de l'utilisateur
+     */
     public void run(final Scanner scanner) {
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine().trim();
-
-            if (input.equals("help")) {
-                printHelp();
-                continue;
-            } else if (input.equals("stack")) {
-                printStack();
-                continue;
-            } else if (input.equals("clear")) {
-                stack.clear();
-                operationHistory.clear();
-                updateHistory(); 
-                System.out.println("Stack cleared.");
-                continue;
-            } else if (input.equals("undo")) {
-                undo();
-                continue;
-            } else if (input.equals("quit")) {
-                System.out.println("Returning to main application.");
-                break;
-            } else if (input.equals("exit")) {
-                System.out.println("Goodbye!");
-                System.exit(0);
+            switch (input) {
+                case "help":
+                    printHelp();
+                    continue;
+                case "stack":
+                    printStack();
+                    continue;
+                case "clear":
+                    stack.clear();
+                    operationHistory.clear();
+                    updateHistory();
+                    System.out.println("Stack cleared.");
+                    continue;
+                case "undo":
+                    undo();
+                    continue;
+                case "quit":
+                    System.out.println("Returning to main application.");
+                    break;
+                case "exit":
+                    System.out.println("Goodbye!");
+                    System.exit(0);
+                default:
+                    break;
             }
-
+            
             updateHistory();
 
             try {
+                // Test si l'input est un entier
                 int value = Integer.parseInt(input);
                 stack.push(new ConstantFormula(value));
             } catch (NumberFormatException e) {
+                // Test si l'input est une operation d'une formule
                 FormulaOperation operation = operationsMap.get(input);
                 if (operation != null) {
                     operation.apply(stack);
@@ -74,18 +83,20 @@ public class SymbolicCalculator {
                     System.err.println("Error: invalid operation/command not found or not defined (" + input + ")");
                 }
             } catch (IllegalArgumentException e) {
+                // Erreur sur l'operation d'une formule
                 if (!operationHistory.isEmpty()) {
                     operationHistory.pop();
                 }
 
                 System.err.println("Error operation: " + e.getMessage());
             } catch (Exception e) {
+                // Autre erreur
                 if (!operationHistory.isEmpty()) {
                     operationHistory.pop(); 
                 }
                 System.err.println("Error: " + e.getMessage());
             }
-
+            
             if (!stack.isEmpty()) {
                 printStack();
             } else {
@@ -94,6 +105,9 @@ public class SymbolicCalculator {
         }
     }
 
+    /**
+     * Afficher le message d'aide
+     */
     private void printHelp() {
         System.out.println("""
             --------------------------------------------------------------------------------
@@ -125,6 +139,13 @@ public class SymbolicCalculator {
         );
     }
 
+    /**
+     * Affiche l'etat actuel de la pile
+     *
+     * La pile est affiche sous la forme "Formula => Value"
+     * Si la formule est infinie ou indefinie, on affiche "INFINITE / UNDEFINED"
+     * Si la pile est vide, on affiche "Stack empty."
+     */
     private void printStack() {
         if (stack.isEmpty()) {
             System.out.println("Stack empty.");
@@ -134,24 +155,40 @@ public class SymbolicCalculator {
         System.out.println("Stack (Formula => Value) :");
         for (int i = 0; i < stack.size(); i++) {
             Formula formula = stack.get(i);
+            // Evalue la formule pour avoir un ensemble fini ou non défini
             Optional<Set<Integer>> result = formula.eval();
+            // Pour tous les ensembles de la formule, on applique la fonction de formattage
             String evalString = result.map(set -> formatSetForDisplay(set))
                                         .orElse("INFINITE / UNDEFINED");
             System.out.println(formula.toString() + " => " + evalString);
         }
     }
 
+    /**
+     * Formate un ensemble d'entiers pour l'affichage en le convertissant en une chaîne de caractères d'éléments séparés par des virgules, triés par ordre croissant (par le TreeSet)
+     * Retourne {} si l'ensemble est vide.
+     *
+     * @param set L'ensemble d'entiers à formater.
+     * @return Le resultat de la conversion de l'ensemble en une chaîne de caractères.
+     */
     private String formatSetForDisplay(Set<Integer> set) {
         if (set.isEmpty()) return "{}";
         return "{" + new TreeSet<>(set).stream()
                                         .map(Object::toString)
                                         .collect(java.util.stream.Collectors.joining(", ")) + "}";
     }
-
+    
+    /**
+     * Sauvegarde l'état actuel de la pile dans l'historique des opérations
+     * Permet d'annuler la dernière opération
+     */
     private void updateHistory() {
         operationHistory.push(new HistoryOperation(stack));
     }
 
+    /**
+     * Annule la derniere operation de l'historique puis affiche l'état de la pile après l'annulation
+     */
     private void undo() {
         if (!operationHistory.isEmpty()) {
             HistoryOperation history = operationHistory.pop();

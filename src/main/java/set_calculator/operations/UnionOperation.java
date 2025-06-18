@@ -1,7 +1,8 @@
 package set_calculator.operations;
 
-import java.util.Stack;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Stack;
 
 public class UnionOperation<T extends Collection<Integer>> implements Operation<T> {
     
@@ -11,6 +12,11 @@ public class UnionOperation<T extends Collection<Integer>> implements Operation<
         this.typeClass = typeClass;
     }
 
+    /**
+     * Pop deux ensembles de la pile et push leur union dans la pile
+     * 
+     * @param stack La pile
+     */
     @Override
     public void apply(final Stack<T> stack) {
         if (stack.size() < 2) {
@@ -24,7 +30,7 @@ public class UnionOperation<T extends Collection<Integer>> implements Operation<
             union.addAll(set1);
             union.addAll(set2);
             stack.push(union);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             throw new RuntimeException("Error during union", e);
         }
     }

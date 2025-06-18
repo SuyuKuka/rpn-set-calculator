@@ -1,8 +1,9 @@
 package set_calculator.operations;
 
-import java.util.Stack;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Stack;
 
 public class MaxOperation<T extends Collection<Integer>> implements Operation<T> {
 
@@ -12,6 +13,11 @@ public class MaxOperation<T extends Collection<Integer>> implements Operation<T>
         this.typeClass = typeClass;
     }
 
+    /**
+     * Pop un ensemble de la pile et push la valeur max de l'ensemble dans la pile
+     * 
+     * @param stack La pile
+     */
     @Override
     public void apply(final Stack<T> stack) {
         if (stack.isEmpty()) {
@@ -28,7 +34,7 @@ public class MaxOperation<T extends Collection<Integer>> implements Operation<T>
             T max = typeClass.getDeclaredConstructor().newInstance();
             max.add(maxVal);
             stack.push(max);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
         

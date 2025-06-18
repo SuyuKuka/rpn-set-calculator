@@ -1,11 +1,10 @@
 package set_calculator;
 
-import java.util.Map;
-import java.util.Stack;
-import java.util.Scanner;
-import java.util.HashMap;
 import java.util.Collection;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Stack;
 import set_calculator.operations.*;
 
 public class RPNCalculator<T extends Collection<Integer>> {
@@ -26,37 +25,44 @@ public class RPNCalculator<T extends Collection<Integer>> {
         operationsMap.put("max", new MaxOperation<>(typeClass));
     }
 
+    /**
+     * Lance la calculatrice RPN
+     * 
+     * @param scanner Le scanner de l'utilisateur
+     */
     public void run(final Scanner scanner) {
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine().trim();
 
-            if (input.isEmpty()) {
-                continue;
-            } else if (input.equals("help")) {
-                printHelp();
-                continue;
-            } else if (input.equals("stack")) {
-                printStack(stack);
-                continue;
-            } else if (input.equals("clear")) {
-                stack.clear();
-                System.out.println("Stack cleared.");
-                continue;
-            } else if (input.equals("quit")) {
-                System.out.println("Returning to main application.");
-                break;
-            } else if (input.equals("exit")) {
-                System.out.println("Goodbye!");
-                System.exit(0);
+            switch (input) {
+                case "help":
+                    printHelp();
+                    continue;
+                case "stack":
+                    printStack(stack);
+                    continue;
+                case "clear":
+                    stack.clear();
+                    System.out.println("Stack cleared.");
+                    continue;
+                case "quit":
+                    System.out.println("Returning to main application.");
+                    break;
+                case "exit":
+                    System.out.println("Goodbye!");
+                    System.exit(0);
+                default:
+                    break;
             }
 
-
             try {
+                // Test si l'input est un entier
                 int value = Integer.parseInt(input);
                 Operation<T> constantOp = new ConstantOperation<>(value, typeClass);
                 constantOp.apply(stack);
             } catch (NumberFormatException e) {
+                // Test si l'input est une operation
                 Operation<T> operation = operationsMap.get(input);
                 if (operation != null) {
                     operation.apply(stack);
@@ -65,8 +71,10 @@ public class RPNCalculator<T extends Collection<Integer>> {
                     continue;
                 }
             } catch (IllegalArgumentException e) {
+                // Erreur sur l'operation
                 System.err.println("Error operation: " + e.getMessage());
             } catch (Exception e) {
+                // Autre erreur
                 System.err.println("Error: " + e.getMessage());
             }
 
@@ -74,6 +82,9 @@ public class RPNCalculator<T extends Collection<Integer>> {
         }
     }
 
+    /**
+     * Affiche le message d'aide
+     */
     private void printHelp() {
         System.out.println("""
             --------------------------------------------------------------------------------
@@ -102,6 +113,11 @@ public class RPNCalculator<T extends Collection<Integer>> {
         );
     }
 
+    /**
+     * Affiche l'état actuel de la pile
+     * 
+     * @param stack La pile
+     */
     private void printStack(final Stack<T> stack) {
         if (!stack.isEmpty()) {
             for (int i = 0; i < stack.size(); i++) {

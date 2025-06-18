@@ -1,7 +1,8 @@
 package set_calculator.operations;
 
-import java.util.Stack;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Stack;
 
 public class IntersectionOperation<T extends Collection<Integer>> implements Operation<T> {
     
@@ -11,6 +12,11 @@ public class IntersectionOperation<T extends Collection<Integer>> implements Ope
         this.collectionType = collectionType;
     }
 
+    /**
+     * Pop deux ensembles de la pile et push leur intersection dans la pile
+     *
+     * @param stack La pile
+     */
     @Override
     public void apply(final Stack<T> stack) {
         if (stack.size() < 2) {
@@ -24,7 +30,7 @@ public class IntersectionOperation<T extends Collection<Integer>> implements Ope
             intersection.addAll(set1);
             intersection.retainAll(set2);
             stack.push(intersection);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
